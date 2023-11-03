@@ -1,0 +1,42 @@
+https://docs.google.com/spreadsheets/d/1aSxsZwbLXt1X7iCDvKyQwtaMvIJTm69wOOsZmRGZqJA/edit?usp=sharing
+
+1. deteksi dan ekstraksi teks dari faktur/bukti tansfer ebanking atau bukti tansaksi lainnya
+Tujuan :
+    - untuk audit transaksi berdasarkan faktur/bukti tansfer ebanking
+
+Metode:
+    - mengekstraksi fitur/ teks dari faktur
+    - Menggunakan metode OCR
+    
+bukti transaksi :
+    - ebanking (transfer, Tarik Tunai, cek saldo, pulsa, tagihan listrik, Token Listrik, dana, shopee pay, Link Aja)
+    - transaksi lain (faktur fisik):
+            - scan
+            - foto manual
+            - menambahkan fungsi take foto di sistem
+
+link:
+https://www.youtube.com/watch?v=w5V5q7FcHzs
+
+ini bagus
+https://www.youtube.com/watch?v=fcZ0lgNImDk
+
+#####
+pembuatan aplikasi web untuk upload faktur, menyimpan dan report
+
+yang di buat :
+    - sistem web, meliputi : - Login dan upload
+                             - repositori dan manajemen
+                             - report
+                             
+    - python untuk deteksi dan ekstraksi teks
+    - API untuk menghubungkan antara WEB dan Python
+
+
+2. pembuatan web :
+    laravel
+    template -> 1 
+    database : mySQL
+    Hosting : free dan paid
+    
+3. Desain Sistem
