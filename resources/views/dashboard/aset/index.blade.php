@@ -2,7 +2,22 @@
 
 @section('content')
     <div class="container">
-        <h2 class="main-title mt-2 fw-semibold fs-3">Tabel Data Aset</h2>
+        <div class="row">
+            <div class="col">
+                <h2 class="main-title mt-2 fw-semibold fs-2">Data Aset</h2>
+            </div>
+            <div class="col">
+                <form action="{{ route('aset.index') }}" method="GET">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" name="search" placeholder="Cari Daftar Aset"
+                            aria-label="Example text with two button addons">
+                        <button class="btn btn-info text-white" type="submit">Cari</button>
+                        <a class="btn btn-dark" type="button" href="{{ route('aset.index') }}">Reset</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
 
         <div class="row">
             <div class="col-sm-6 col-md">
@@ -20,144 +35,82 @@
             </div>
         </div>
 
-        <button class="btn btn-primary fs-5 fw-normal mt-2" data-bs-toggle="modal" data-bs-target="#tambah"><i
-                class="fa-solid fa-square-plus fs-5 me-2"></i>Tambah</button>
-        <div class="row mt-3">
-            <div class="col">
-                <div class="card mt-2">
-                    <div class="card-body">
+        <div class="col-12 mb-4 d-flex">
+            <div class="col-4">
 
-                        {{-- Tabel Data Unit --}}
-                        <table id="myTable" class="table responsive nowrap table-bordered table-striped align-middle"
-                            style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>NO</th>
-                                    <th>BARANG</th>
-                                    <th>RUANG</th>
-                                    <th>ACTION</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($asets as $aset)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $aset->Barang->name }}</td>
-                                        <td>{{ $aset->Ruang->name }}</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal"
-                                                data-bs-target="#edit{{ $loop->iteration }}">
-                                                <i class="fa-solid fa-pen-to-square"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
-                                                data-bs-target="#hapus{{ $loop->iteration }}">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-
-                                    {{-- Modal Edit ruang --}}
-                                    <x-form_modal>
-                                        @slot('id', "edit$loop->iteration")
-                                        @slot('title', 'Edit Data Aset')
-                                        @slot('route', route('aset.update', $aset->id))
-                                        @slot('method') @method('put') @endslot
-                                        @slot('btnPrimaryTitle', 'Perbarui')
-
-
-                                        <div class="mb-3">
-                                            <label for="id_barang" class="form-label">barang</label>
-                                            <select class="form-select" id="id_barang" name="id_barang">
-                                                @foreach ($barangs as $barang)
-                                                    @if (old('id_barang', $ruang->id_barang) == $barang->id)
-                                                        <option value="{{ $barang->id }}" selected>
-                                                            {{ $barang->name }}
-                                                        </option>
-                                                    @else
-                                                        <option value="{{ $barang->id }}">
-                                                            {{ $barang->name }}
-                                                        </option>
-                                                    @endif
-                                                @endforeach
-                                            </select>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label for="id_ruang" class="form-label">Ruang</label>
-                                            <select class="form-select" id="id_ruang" name="id_ruang">
-                                                @foreach ($ruangs as $ruang)
-                                                    @if (old('id_ruang', $ruang->id_ruang) == $ruang->id)
-                                                        <option value="{{ $ruang->id }}" selected>
-                                                            {{ $ruang->name }}
-                                                        </option>
-                                                    @else
-                                                        <option value="{{ $ruang->id }}">
-                                                            {{ $ruang->name }}
-                                                        </option>
-                                                    @endif
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </x-form_modal>
-                                    {{-- / Modal Edit ruang --}}
-
-                                    {{-- Modal Hapus ruang --}}
-                                    <x-form_modal>
-                                        @slot('id', "hapus$loop->iteration")
-                                        @slot('title', 'Hapus Data Aset')
-                                        @slot('route', route('aset.destroy', $aset->id))
-                                        @slot('method') @method('delete') @endslot
-                                        @slot('btnPrimaryClass', 'btn-outline-danger')
-                                        @slot('btnSecondaryClass', 'btn-secondary')
-                                        @slot('btnPrimaryTitle', 'Hapus')
-
-                                        <p class="fs-5">Apakah anda yakin akan menghapus data Aset
-                                            <b>{{ $aset->name }}</b>?
-                                        </p>
-
-                                    </x-form_modal>
-                                    {{-- / Modal Hapus ruang  --}}
-                                @endforeach
-                            </tbody>
-                        </table>
-                        {{-- / Tabel Data ... --}}
-                    </div>
-                </div>
             </div>
         </div>
+
+        @if (isset($search))
+            <p>Hasil Pencarian untuk: <strong>{{ $search }}</strong></p>
+        @endif
+
+        <div class="row mt-3">
+            @forelse ($ruangs as $ruangan)
+                <div class="col-sm-6 col-lg-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title fw-bold mb-2">Ruangan {{ strtoupper($ruangan->name) }} </h3>
+                            <p class="card-text mb-2">Unit : {{ $ruangan->unit->name }}
+                            <p class="card-text mb-2">Total Barang : {{ $ruangan->total_barang }}
+                            <div class="d-flex gap-2">
+                                <div class="w-100">
+                                    <a href="{{ route('ruang.show', $ruangan->id) }}" type="button"
+                                        class="btn btn-primary w-100">
+                                        Masuk
+                                    </a>
+                                </div>
+                                <a href="{{ route('aset.pdf', [$ruangan->id]) }}" type="button"
+                                    class="btn btn-secondary text-white">
+                                    <i class="fa-solid fa-print"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            @empty
+                <P class="fs-5 text-center">Pesebaran Aset Belum Ada</P>
+            @endforelse
+            {{-- paginasi --}}
+            @if (isset($search))
+
+            @else
+            <div class="row my-4">
+                <div class="col-12">
+                    <ul class="pagination justify-content-center">
+                        {{-- Previous Page Link --}}
+                        @if ($ruangs->onFirstPage())
+                            <li class="page-item disabled">
+                                <span class="page-link">Previous</span>
+                            </li>
+                        @else
+                            <li class="page-item">
+                                <a class="page-link" href="{{ $ruangs->previousPageUrl() }}" rel="prev">Previous</a>
+                            </li>
+                        @endif
+
+                        {{-- Pagination Elements --}}
+                        @for ($i = 1; $i <= $ruangs->lastPage(); $i++)
+                            <li class="page-item {{ $i == $ruangs->currentPage() ? 'active' : '' }}">
+                                <a class="page-link" href="{{ $ruangs->url($i) }}">{{ $i }}</a>
+                            </li>
+                        @endfor
+
+                        {{-- Next Page Link --}}
+                        @if ($ruangs->hasMorePages())
+                            <li class="page-item">
+                                <a class="page-link" href="{{ $ruangs->nextPageUrl() }}" rel="next">Next</a>
+                            </li>
+                        @else
+                            <li class="page-item disabled">
+                                <span class="page-link">Next</span>
+                            </li>
+                        @endif
+                    </ul>
+                </div>
+            </div>
+            @endif
+        </div>
     </div>
-
-    <!-- Modal Tambah ruang -->
-    <x-form_modal>
-        @slot('id', 'tambah')
-        @slot('title', 'Tambah Data Aset')
-        @slot('overflow', 'overflow-auto')
-        @slot('route', route('aset.store'))
-
-        @csrf
-        <div class="row">
-
-            <div class="mb-3">
-                <label for="id_barang" class="form-label">barang</label>
-                <select class="form-select" id="id_barang" name="id_barang">
-                    @foreach ($barangs as $barang)
-                        <option value="{{ $barang->id }}">
-                            {{ $barang->name }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label for="id_ruang" class="form-label">Ruang</label>
-                <select class="form-select" id="id_ruang" name="id_ruang">
-                    @foreach ($ruangs as $ruang)
-                        <option value="{{ $ruang->id }}">
-                            {{ $ruang->name }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-    </x-form_modal>
-    <!-- Akhir Modal Tambah User -->
 @endsection

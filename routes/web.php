@@ -26,6 +26,10 @@ Route::get('/', function () {
     return view('auth.signin');
 });
 
+Route::get('/template', function () {
+    return view('dashboard.template.aset');
+});
+
 Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'index')->name('login')->middleware('guest');
     Route::post('/login', 'login');
@@ -43,9 +47,10 @@ Route::prefix('/dashboard')->group(function () {
 
     Route::resource('/variant', VariantController::class)->except(['create', 'show', 'edit'])->middleware('auth');
 
-    Route::resource('/aset', AsetController::class)->except(['create', 'show', 'edit'])->middleware('auth');
+    Route::resource('/aset', AsetController::class)->except(['create', 'edit'])->middleware('auth');
+    Route::get('/aset/{ruangan}/generate-pdf', [AsetController::class,'generatePDF'])->name('aset.pdf');
 
-    Route::resource('/ruang', RuangController::class)->except(['create', 'show', 'edit'])->middleware('auth');
+    Route::resource('/ruang', RuangController::class)->except(['create', 'edit'])->middleware('auth');
 
     Route::put('/resetpassword/{user}', [ResetPasswordController::class, 'resetPasswordAdmin'])->name('resetpassword.resetPasswordAdmin')->middleware('auth');
 

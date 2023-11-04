@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\aset;
+use App\Models\Barang;
 use App\Models\Ruangan;
 use App\Models\Unit;
 use Illuminate\Http\Request;
@@ -58,9 +60,12 @@ class RuangController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Ruangan $Ruang)
     {
-        //
+        $barangs = Barang::all();
+        $asets = aset::where('idRuangan', $Ruang->id)->get();
+        $aset2 = aset::all();
+        return view('dashboard.aset.detail.index')->with(compact('barangs', 'asets', 'Ruang', 'aset2'));
     }
 
     /**

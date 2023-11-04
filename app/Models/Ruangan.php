@@ -20,4 +20,9 @@ class Ruangan extends Model
     {
         return $this->hasMany(Aset::class, 'idRuangan')->orderBy('id', 'DESC');
     }
+
+    public function getTotalBarangAttribute()
+    {
+        return Aset::where('idRuangan', $this->id)->count();
+    }
 }

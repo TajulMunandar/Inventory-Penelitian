@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Barang;
-use App\Models\Kategori;
+use App\Models\Ruangan;
+use App\Models\Unit;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        return view('dashboard.index');
+        $units = Unit::all();
+        return view('dashboard.index')->with(compact('units'));
     }
 }
